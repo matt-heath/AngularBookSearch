@@ -1,0 +1,344 @@
+<div *ngFor=
+       "let book of webService.book_list | async">
+
+  <div mdbModal #editModal="mdb-modal" class="modal fade" tabindex="-1" role="dialog"
+       aria-labelledby="myBasicModalLabel" aria-hidden="true" [config]="{backdrop: true, ignoreBackdropClick: false}">
+    <div class="modal-dialog  modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close pull-right" aria-label="Close" (click)="basicModal.hide()">
+            <span aria-hidden="true">×</span>
+          </button>
+          <h4 class="modal-title w-100" id="myModalLabel1">Edit Book</h4>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="updateBookForm" (ngSubmit)="basicModal.hide(); onSubmitEditBook(book._id)">
+            <div class="form-group">
+              <label for="title">Book Title</label>
+              <input type="text" id="title"
+                     class="form-control"
+                     formControlName="title"
+                     [(ngModel)]="updateBook.title"
+                     [ngClass]="{'error': isInvalidUpdate('title')}"
+              >
+              <div *ngIf="updateBookForm.controls['title'].touched && !updateBookForm.controls['title'].valid">
+                <span *ngIf="updateBookForm.controls['title'].hasError('required') ">
+                    Book title is required
+                </span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="isbn">Book ISBN Number</label>
+              <input type="text" id="isbn"
+                     class="form-control"
+                     formControlName="isbn"
+                     [(ngModel)]="updateBook.isbn"
+                     [ngClass]="{'error': isInvalidUpdate('isbn')}"
+              >
+              <div *ngIf="updateBookForm.controls['isbn'].touched && !updateBookForm.controls['isbn'].valid">
+                  <span *ngIf="updateBookForm.controls['isbn'].hasError('required') ">
+                      ISBN number is required
+                  </span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="pageCount">Page Count</label>
+              <input type="number" id="pageCount"
+                     class="form-control"
+                     formControlName="pageCount"
+                     [(ngModel)]="updateBook.pageCount"
+              >
+            </div>
+            <div class="form-group">
+              <label for="publishedDate">Published Date</label>
+              <input type="date" id="publishedDate"
+                     class="form-control"
+                     formControlName="publishedDate"
+                     [(ngModel)]="updateBook.publishedDate"
+                     [ngClass]="{'error': isInvalidUpdate('publishedDate')}"
+
+              >
+              <div
+                *ngIf="updateBookForm.controls['publishedDate'].touched && !updateBookForm.controls['publishedDate'].valid">
+                  <span *ngIf="updateBookForm.controls['publishedDate'].hasError('required') ">
+                      Published date is required
+                  </span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="thumbnailUrl">Image URL</label>
+              <input type="text" id="thumbnailUrl"
+                     class="form-control"
+                     formControlName="thumbnailUrl"
+                     [(ngModel)]="updateBook.thumbnailUrl"
+              >
+            </div>
+            <div class="form-group">
+              <label for="shortDescription">Short Description</label>
+              <textarea type="text" id="shortDescription"
+                        class="form-control"
+                        formControlName="shortDescription"
+                        [(ngModel)]="updateBook.shortDescription"
+                        [ngClass]="{'error': isInvalidUpdate('shortDescription')}"
+              ></textarea>
+              <div
+                *ngIf="updateBookForm.controls['shortDescription'].touched && !updateBookForm.controls['shortDescription'].valid">
+                  <span *ngIf="updateBookForm.controls['shortDescription'].hasError('required') ">
+                      A short description is required
+                  </span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="longDescription">Long Description</label>
+              <textarea type="text" id="longDescription"
+                        class="form-control"
+                        formControlName="longDescription"
+                        [(ngModel)]="updateBook.longDescription"
+                        [ngClass]="{'error': isInvalidUpdate('longDescription')}"
+              ></textarea>
+              <div
+                *ngIf="updateBookForm.controls['longDescription'].touched && !updateBookForm.controls['longDescription'].valid">
+                  <span *ngIf="updateBookForm.controls['longDescription'].hasError('required') ">
+                      A long description is required
+                  </span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="status">Book Status</label>
+              <input type="text" id="status"
+                     class="form-control"
+                     formControlName="status"
+                     [(ngModel)]="updateBook.status"
+                     [ngClass]="{'error': isInvalidUpdate('status')}"
+              >
+              <div *ngIf="updateBookForm.controls['status'].touched && !updateBookForm.controls['status'].valid">
+                  <span *ngIf="updateBookForm.controls['status'].hasError('required') ">
+                      Book Status is required
+                  </span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="authors">Authors (Multiple separated by ';')</label>
+              <input type="text" id="authors"
+                     class="form-control"
+                     formControlName="authors"
+                     [(ngModel)]="updateBook.authors"
+                     [ngClass]="{'error': isInvalidUpdate('authors')}"
+              >
+              <div *ngIf="updateBookForm.controls['authors'].touched && !updateBookForm.controls['authors'].valid">
+                  <span *ngIf="updateBookForm.controls['authors'].hasError('required') ">
+                      Author details required
+                  </span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="categories">Book Categories (Multiple separated by ';')</label>
+              <input type="text" id="categories"
+                     class="form-control"
+                     formControlName="categories"
+                     [(ngModel)]="updateBook.categories"
+              >
+            </div>
+            <span *ngIf="isIncompleteUpdate()">You must complete all fields</span>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary waves-light" aria-label="Close"
+                      (click)="basicModal.hide()"
+                      mdbWavesEffect>Close
+              </button>
+              <button type="submit" *ngIf="!isIncompleteUpdate()" class="btn btn-primary relative waves-light"
+                      mdbWavesEffect>
+                Save changes
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div mdbModal #basicModal="mdb-modal" class="modal fade" tabindex="-1" role="dialog"
+       aria-labelledby="myBasicModalLabel" aria-hidden="true" [config]="{backdrop: true, ignoreBackdropClick: false}">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close pull-right" aria-label="Close" (click)="basicModal.hide()">
+            <span aria-hidden="true">×</span>
+          </button>
+          <h4 class="modal-title w-100" id="myModalLabel">Add a review for: {{book.title}}</h4>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="reviewForm" (ngSubmit)="basicModal.hide(); onSubmit()">
+            <input type="text" id="name"
+                   class="form-control d-none"
+                   value="{{profile?.nickname}}"
+                   formControlName="name"
+                   [(ngModel)]="review.name"
+                   readonly
+            >
+            <div *ngIf="reviewForm.controls['name'].touched && !reviewForm.controls['name'].valid">
+                <span *ngIf="reviewForm.controls['name'].hasError('required') ">
+                    First name is required
+                </span>
+              <span *ngIf="reviewForm.controls['name'].hasError('minlength') ">
+                     Min length is 1
+                </span>
+            </div>
+            <div class="form-group">
+              <label for="review">Please leave your review below
+              </label>
+              <textarea id="review" rows="3" name="review"
+                        class="form-control"
+                        formControlName="review"
+                        [ngClass]="{'error': isInvalid('review')}"
+                        [(ngModel)]="review.review">
+              </textarea>
+            </div>
+            <div class="form-group">
+              <label for="stars">Please provide a rating
+                (5 = best)</label>
+              <select id="stars" name="stars"
+                      class="form-control"
+                      formControlName="stars"
+                      [(ngModel)]="review.stars">
+                <option value="1">1 star</option>
+                <option value="2">2 stars</option>
+                <option value="3">3 stars</option>
+                <option value="4">4 stars</option>
+                <option value="5">5 stars</option>
+              </select>
+
+            </div>
+            <span *ngIf="isIncomplete()">You must complete all fields</span>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary waves-light" aria-label="Close" (click)="basicModal.hide()"
+                      mdbWavesEffect>Close
+              </button>
+              <button type="submit" *ngIf="!isIncomplete()" class="btn btn-primary relative waves-light" mdbWavesEffect>
+                Save changes
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="jumbotron">
+    <div class="container">
+      <h1>{{book.title}}</h1>
+      <span *ngIf="authService.isAuthenticated()">
+              <!--{{profile | json}}-->
+        <!--<h3 class="nickname">{{ profile?.nickname }}</h3>-->
+        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+          <div class="btn-group mr-2" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-primary relative waves-light" (click)="basicModal.show()"
+                    mdbWavesEffect>Leave a Review</button>
+          </div>
+          <div class="btn-group mr-2" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-success relative waves-light" (click)="editModal.show()"
+                    mdbWavesEffect>Edit this Book</button>
+          </div>
+          <div class="btn-group mr-2" role="group" aria-label="Basic example">
+            <form [formGroup]="deleteForm">
+              <button type="submit" class="btn btn-danger relative waves-light" mdbWavesEffect [swal]="deleteSwal">Delete Book</button>
+            </form>
+            <swal
+              #deleteSwal
+              title="Delete Book"
+              text="This cannot be undone"
+              type="question"
+              [showCancelButton]="true"
+              [focusCancel]="true"
+              (confirm)="onDelete(book._id)">
+                </swal>
+          </div>
+        </div>
+      </span>
+      <hr>
+      <div class="row">
+        <div class="col-3">
+          <!--<h1>Hi...</h1>-->
+          <!--{{book}}-->
+          <div class="card">
+            <img class="card-img-top" src="{{ book.thumbnailUrl }}"
+                 onerror="this.src='https://inc.mizanstore.com/aassets/img/com_cart/produk/no_cover.jpg'"
+                 alt="Card image cap">
+            <div class="card-body">
+              <h3 class="card-title">{{ book.title }}</h3>
+              <div *ngIf="book.isbn">
+                ISBN: <b>{{book.isbn}}</b>
+              </div>
+              <div *ngIf="book.pageCount">
+                Page Count: <b>{{book.pageCount}}</b>
+              </div>
+              <div *ngIf="book.status">
+                Status: <b>{{book.status}}</b>
+              </div>
+              <div *ngIf="book.authors">
+                Book Authors: <b>{{book.authors}}</b>
+              </div>
+              <div *ngIf="book.categories">
+                Book Categories:
+                <span class="badge badge-info" *ngFor="let category of book.categories">
+                    {{category}}
+                  </span>
+              </div>
+              <!--<div *ngIf="book.publishedDate">-->
+                <!--Date Published: <b>{{book.publishedDate}}</b>-->
+              <!--</div>-->
+              <div *ngIf="book.review_count">
+                Number of Reviews: <b>{{book.review_count}}</b>
+              </div>
+            </div>
+          </div>
+          <!--/.card -->
+        </div>
+        <div class="col-9">
+          <div class="card">
+            <div class="card-body">
+              <div *ngIf="book.shortDescription">
+                <h6>Short Description</h6>
+                <hr>
+                <p class="card-text">
+                  {{book.shortDescription}}
+                </p>
+                <hr>
+              </div>
+              <div *ngIf="book.longDescription">
+                <h6>Full Description of Book</h6>
+                <hr>
+                <p class="card-text">
+                  {{book.longDescription}}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div id="grid-wrapper" style="width:100%; height: 100%">
+        <h5>Book Reviews ({{book.review_count}})</h5>
+        <hr>
+        <ag-grid-angular
+          style="height:500px;"
+          class="ag-theme-material"
+          [enableSorting]="true"
+          [enableFilter]="true"
+          pagination="true"
+          paginationPageSize="10"
+          [enableColResize]="true"
+          [floatingFilter]="true"
+          [rowData]="webService.reviews | async"
+          [columnDefs]="columnDefs"
+          (gridSizeChanged)="onGridSizeChanged($event)"
+        >
+        </ag-grid-angular>
+      </div>
+    </div> <!-- col -->
+  </div> <!-- row -->
+  <span *ngIf="!authService.isAuthenticated()">
+    <h5 class="text-primary">
+      Please log in to leave a review for this book
+    </h5>
+  </span>
+</div> <!-- container -->
+<!--</div>-->

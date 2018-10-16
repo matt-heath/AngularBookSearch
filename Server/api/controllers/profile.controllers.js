@@ -1,9 +1,6 @@
 var mongoose = require('mongoose');
 var Books = mongoose.model('Books');
 
-// model.findOne({name: new RegExp('^'+name+'$', "i")}, function(err, doc) {
-
-
 module.exports.getReviewsByUser = function (req, res) {
     console.log(req.params);
     var username = req.params.username;
@@ -17,43 +14,17 @@ module.exports.getReviewsByUser = function (req, res) {
                 "reviews.username" : {$eq: username}
             }
         ]}}])
-        // .sort({"reviews.stars": 'ascending'})
-        // .select('reviews');
-        // .find({'reviews.username': username})
-
-            // query.select().where({username : username});
-        // .find({reviews: { $elemMatch: {
-        //     username: {$eq: username}
-        // }}})
-        // .select({reviews: {$elemMatch: {username: username}}
-        // .find({'reviews.username': {$eq: username}})
-        // .select('reviews')
-        // .findByUsername()
-        // .select('reviews')
-        // .find({username: username})
-        // .find({username: username})
         .exec(function (err, doc) {
-            // doc.find({}, function (err, reviews) {
-
-            // })
             var thisReview;
             var response = {
                 status: 200,
                 message: {}
             };
-            // console.log(doc);
-            // thisReview = doc.reviews.id;
-            // console.log(thisReview);
-            // var reviews = {};
-            // doc.forEach(function (thisReview) {
-            //     reviews[doc] = doc;
-            // });
             console.log(doc);
             res
                 .status(200)
                 .json(doc);
         })
-    // })
 };
 
 var updateReviewCount = function (req, res, thisBook) {
@@ -173,9 +144,6 @@ module.exports.reviewsDeleteOne = function (req, res) {
                         .status(response.status)
                         .json(response.message);
                 } else {
-                    // thisReview.username = req.body.username;
-                    // thisReview.text = req.body.text;
-                    // thisReview.stars = parseInt(req.body.stars);
                     thisBook.reviews.id(reviewID).remove();
 
                     thisBook.save(function (err, updatedBook) {

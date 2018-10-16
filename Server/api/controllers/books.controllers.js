@@ -51,15 +51,6 @@ module.exports.booksGetAll = function (req, res) {
 
     Books
         .find()
-        // .skip(start) //skip a number of documents before returning results
-        // .limit(number) // max number of docs to be returned
-        // .toArray(function (err,docs) {
-        //     console.log("Retrieved the businesses");
-
-        //     res
-        //         .status(200)
-        //         .json(docs);
-        // })
         .exec(function (err, docs) {
             console.log(docs);
             if (err) {
@@ -133,9 +124,6 @@ module.exports.booksAddOne = function (req, res) {
                 res
                     .status(201)
                     .json(newBook);
-
-                // Books.SyncToAlgolia();
-
             }
         });
 };
@@ -145,12 +133,6 @@ module.exports.booksUpdateOne = function (req, res) {
     var bookID = req.params.bookID;
 
     console.log("GET Book " + bookID);
-
-    // Tank.findByIdAndUpdate(id, { $set: { size: 'large' }}, { new: true }, function (err, tank) {
-    //     if (err) return handleError(err);
-    //     res.send(tank);
-    // });
-
     Books
         .findById(bookID)
         .exec(function (err, doc) {
@@ -201,34 +183,9 @@ module.exports.booksUpdateOne = function (req, res) {
                             .json();
                     }
                 });
-
-                // Books.syncWithAlgolia();
-                // Books.SyncToAlgolia();
             }
         });
 };
-
-// module.exports.booksDeleteOne = function (req, res) {
-//     var bookID = req.params.bookID;
-//
-//     Books
-//         .findByIdAndRemove(bookID)
-//         .exec(function (err, thisBook) {
-//             if (err) {
-//                 res
-//                     .status(400)
-//                     .json(err);
-//             } else {
-//                 console.log("Book " + bookID + " deleted");
-//
-//                 // Books.SyncToAlgolia();
-//
-//                 res
-//                     .status(204)
-//                     .json();
-//             }
-//         });
-// };
 
 module.exports.booksDeleteOne = function (req, res) {
     var bookID = req.params.bookID;
@@ -259,7 +216,6 @@ module.exports.booksDeleteOne = function (req, res) {
                     .status(response.status)
                     .json(response.message);
             } else {
-                // thisBook.remove();
                 thisBook.remove(function (err, updatedBook) {
                     if (err) {
                         res
@@ -275,31 +231,3 @@ module.exports.booksDeleteOne = function (req, res) {
             }
         })
 };
-
-
-// module.exports.fixDatabase = function(req, res) {
-//     Books
-//         .find()
-//         .exec(function(err, docs) {
-//             for (var i = 0; i < docs.length; i++) {
-//                 console.log(docs[i]);
-//                 books = docs[i];
-//                 _id = books._id;
-//                 username = books.username;
-//                 text = books.text;
-//                 stars = books.stars;
-//                 Books.updateOne (
-//                     { "_id" : _id },
-//                     { $set : {
-//                         "username" : username,
-//                         "text" : text,
-//                         "stars" : stars
-//                     }
-//                     }
-//                 );
-//             }
-//             res
-//                 .status(200)
-//                 .json({"Message" : "Database updated"});
-//         })
-// }

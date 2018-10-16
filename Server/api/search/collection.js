@@ -31,7 +31,6 @@ Collection.prototype.removeDuplicates = function () {
   });
 }
 
-
 Collection.prototype.printDocuments = function () {
   this.documentList.forEach(doc => console.log(doc));
 }

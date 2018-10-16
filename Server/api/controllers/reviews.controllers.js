@@ -31,14 +31,7 @@ module.exports.reviewsGetOne = function (req, res) {
             {
                 $unwind: '$reviews'
             })
-        // .findById(bookID)
-        // .select("reviews")
-        // .where('reviews._id')
-        // .find({"reviews._id": reviewID})
-        // .select('reviews')
-        // .findById(bookID)
         .exec(function (err, doc) {
-            // var review = doc.reviews.id(reviewID);
             res
                 .status(200)
                 .json(doc);
@@ -138,14 +131,9 @@ module.exports.reviewsUpdateOne = function (req, res) {
     Books
         .findById(bookID)
         .select('reviews')
-        // .findOne({_id: bookID})
-        // .where({'reviews._id': reviewID})
-        // .findOne({'reviews._id': reviewID})
-        // .select('reviews')
         .exec(function (err, thisBook) {
 
             console.log(thisBook);
-            // console.log(thisBook.reviews[0]._id);
             var thisReview;
             var response = {
                 status: 200,
@@ -197,7 +185,7 @@ module.exports.reviewsUpdateOne = function (req, res) {
                 }
             }
         });
-}
+};
 
 module.exports.reviewsDeleteOne = function (req, res) {
     var bookID = req.params.bookID;
@@ -240,9 +228,6 @@ module.exports.reviewsDeleteOne = function (req, res) {
                         .status(response.status)
                         .json(response.message);
                 } else {
-                    // thisReview.username = req.body.username;
-                    // thisReview.text = req.body.text;
-                    // thisReview.stars = parseInt(req.body.stars);
                     thisBook.reviews.id(reviewID).remove();
 
                     thisBook.save(function (err, updatedBook) {
@@ -261,4 +246,4 @@ module.exports.reviewsDeleteOne = function (req, res) {
                 }
             }
         });
-}
+};
