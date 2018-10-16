@@ -1,0 +1,5 @@
+<div class="jumbotron">
+  <h1>We MEAN Business</h1>
+  <button *ngIf="!authService.isAuthenticated()" (click)="authService.login()">Login</button>
+  <button *ngIf="authService.isAuthenticated()" (click)="authService.logout()">Logout</button>
+</div>

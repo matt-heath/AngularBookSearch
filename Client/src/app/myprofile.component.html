@@ -1,0 +1,167 @@
+<div class="jumbotron">
+  <div class="container">
+    <h1>Your Book Reviews</h1>
+    <hr>
+    <div class="row">
+      <div class="card-deck">
+        <div class="col-lg-3 col-xs-12 col-md-6 mb-4"
+             *ngFor="let book of webService.user_reviews | async | paginate: { itemsPerPage: 4, currentPage: p }">
+          <!--Card-->
+          <!--{{"REVIEW" + book.reviews.usernam}}-->
+          <div class="card mb-4 h-100">
+            <!--Card image-->
+            <div class="view overlay">
+              <img class="img-fluid w-100 d-block" src="{{ book.thumbnailUrl }}"
+                   onerror="this.src='https://inc.mizanstore.com/aassets/img/com_cart/produk/no_cover.jpg'"
+                   alt="Card image cap">
+            </div>
+            <!--Card content-->
+            <div class="card-body">
+
+              <!--Title-->
+              <h5 class="card-title text-center">
+                Review of {{book.title}}
+                <!--Review of {{book._id}}-->
+                <!--Review of {{book.reviews._id}}-->
+              </h5>
+              <hr>
+              <star-rating [starType]="'svg'" [rating]="book.reviews.stars" [readOnly]="true" labelText="Your Rating"
+                           labelPosition="top"></star-rating>
+              <hr>
+
+              <!--Text-->
+              <p class="card-text text-center">
+                {{ book.reviews.text }}<br>
+              </p>
+            </div>
+            <!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
+            <div class="card-footer">
+              <span *ngIf="authService.isAuthenticated()">
+              <!--{{profile | json}}-->
+                <!--<h3 class="nickname">{{ profile?.nickname }}</h3>-->
+                <button class="btn btn-info" (click)="editReview(book._id, book.reviews._id); basicModal.show()">
+                 Edit Review  <i class="fa fa-edit"></i>
+                </button>
+                <div mdbModal #basicModal="mdb-modal" class="modal fade" tabindex="-1" role="dialog"
+                     aria-labelledby="myBasicModalLabel" aria-hidden="true"
+                     [config]="{backdrop: true, ignoreBackdropClick: false}">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close pull-right" aria-label="Close" (click)="basicModal.hide()">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                  <h4 class="modal-title w-100" id="myModalLabel">Modal title</h4>
+                </div>
+                  <div class="container" *ngFor="let review of webService.user_review | async">
+                    <div class="modal-body">
+                  <form [formGroup]="updateReviewForm"
+                        (ngSubmit)="onSubmitUpdate(review[0].reviews[0]._id, review[0]._id); basicModal.hide()"
+                        class="col s12">
+
+                    <!--{{review | json}}-->
+                    <!--{{review[0].reviews[0]._id}}-->
+                    <!--{{webService.review_list[0]}}-->
+                    <div class="form-group">
+                      <label for="text">Your Review</label>
+                      <textarea formControlName="review" id="text" class="form-control md-textarea"
+                                [(ngModel)]="updateReview.review"
+                                [ngClass]="{'error': isInvalid('review')}"
+                      ></textarea>
+                      <div *ngIf="updateReviewForm.controls['review'].touched && !updateReviewForm.controls['review'].valid">
+                        <span *ngIf="updateReviewForm.controls['review'].hasError('required') ">
+                            Review required
+                        </span>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="stars">Please provide a rating
+                        (5 = best)</label>
+                      <select id="stars" name="stars"
+                              class="form-control"
+                              formControlName="stars"
+                              [(ngModel)]="updateReview.stars">
+                        <option value="1">1 star</option>
+                        <option value="2">2 stars</option>
+                        <option value="3">3 stars</option>
+                        <option value="4">4 stars</option>
+                        <option value="5">5 stars</option>
+                      </select></div>
+                <div class="modal-footer">
+                  <!--<button type="button" class="btn btn-secondary waves-light" aria-label="Close"-->
+                          <!--(click)="basicModal.hide()" mdbWavesEffect>Close</button>-->
+                  <!--<button type="submit" class="btn btn-primary relative waves-light"-->
+                          <!--mdbWavesEffect>Save changes</button>-->
+                  <span *ngIf="isIncomplete()">You must complete all fields</span>
+                    <button type="button" class="btn btn-secondary waves-light" aria-label="Close"
+                            (click)="basicModal.hide()"
+                            mdbWavesEffect>Close
+                    </button>
+                    <button type="submit" *ngIf="!isIncomplete()" class="btn btn-primary relative waves-light"
+                            mdbWavesEffect>
+                      Save changes
+                    </button>
+                </div>
+                    </form>
+                     </div>
+                </div>
+              </div>
+            </div>
+          </div>
+                <form [formGroup]="deleteUserReviewForm">
+                  <button type="submit" class="btn btn-danger waves-light"
+                          mdbWavesEffect [swal]="deleteSwal">Delete Review <i class="fa fa-trash"></i> </button>
+                </form>
+
+                <swal
+                  #deleteSwal
+                  title="Delete Review"
+                  text="This cannot be undone"
+                  type="question"
+                  [showCancelButton]="true"
+                  [focusCancel]="true"
+                  (confirm)="onSubmit(book._id, book.reviews._id)">
+                </swal>
+              </span>
+            </div>
+            <!--Card content-->
+          </div>
+          <!--<form [formGroup] = "updateForm" (ngSubmit)="onUpdate()" class="form-inline">-->
+        </div>
+      </div>
+      <!--</div>-->
+      <!--<div *ngFor="let review of webService.user_reviews | async">-->
+      <!--{{review.reviews | json}}-->
+      <!--<input type="submit" class="button expanded" value="Submit Form" >-->
+      <!--</div>-->
+    </div>
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+
+  </div>
+  <!--<div class="col-9">-->
+  <!--<div class="card">-->
+  <!--<div class="card-body">-->
+  <!--<div *ngIf="book.shortDescription">-->
+  <!--<h6>Short Description</h6>-->
+  <!--<hr>-->
+  <!--<p class="card-text">-->
+  <!--{{book.shortDescription}}-->
+  <!--</p>-->
+  <!--<hr>-->
+  <!--</div>-->
+  <!--<div *ngIf="book.longDescription">-->
+  <!--<h6>Full Description of Book</h6>-->
+  <!--<hr>-->
+  <!--<p class="card-text">-->
+  <!--{{book.longDescription}}-->
+  <!--</p>-->
+  <!--</div>-->
+  <!--</div>-->
+  <!--</div>-->
+  <!--</div>-->
+
+  <!--{{thisReview}}-->
+  <!--<div *ngFor="let review of webService.review_list">-->
+  <!--{{review.text}}-->
+  <!--</div>-->
+</div>

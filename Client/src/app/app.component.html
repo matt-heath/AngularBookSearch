@@ -1,0 +1,71 @@
+<!--<router-outlet></router-outlet>-->
+<!--Navbar-->
+<mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark info-color">
+
+  <!-- Navbar brand -->
+  <logo><a class="navbar-brand"
+           routerLink="/books"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: true }">
+    <i class="fa fa-book"></i> Learn-a-Lot Books
+  </a></logo>
+
+  <!-- Collapsible content -->
+  <links>
+
+    <!-- Links -->
+    <ul class="navbar-nav mr-auto">
+      <li class="navbar-nav mr-auto">
+        <a routerLink="/books" mdbWavesEffect class="nav-link waves-effect waves-light">Search page</a>
+      </li>
+    </ul>
+    <!-- Links -->
+
+    <!-- Search form -->
+    <ul class="navbar-nav">
+      <!-- Dropdown -->
+      <li class="nav-item dropdown" *ngIf="authService.isAuthenticated(); else loginContent" dropdown >
+        <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+          <i class="fa fa-user"></i> {{profile?.nickname}}<span class="caret"></span></a>
+        <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
+          <a class="dropdown-item waves-light" mdbWavesEffect routerLink="/myProfile/{{profile?.nickname}}">My Profile</a>
+          <div class="divider dropdown-divider"></div>
+          <a class="dropdown-item waves-light" mdbWavesEffect *ngIf="authService.isAuthenticated()" (click)="authService.logout()">Logout</a>
+        </div>
+      </li>
+    </ul>
+
+    <ng-template #loginContent>
+      <li class="nav-item">
+        <button *ngIf="!authService.isAuthenticated()" (click)="authService.login()" type="button" class="btn btn-deep-purple waves-light" mdbWavesEffect>Login</button>
+      </li>
+    </ng-template>
+  </links>
+  <!-- Collapsible content -->
+
+</mdb-navbar>
+<div class="container">
+  <!-- <header class="header clearfix">
+    <nav>
+      <ul class="nav nav-pills float-right">
+        <li class="nav-item">
+          <a
+            routerLink="/"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="nav-link"
+          >
+            Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/books" routerLinkActive="active" class="nav-link">Search page</a>
+        </li>
+      </ul>
+    </nav>
+    <!-- <h3 class="text-muted">Learn-a-Lot Books</h3> -->
+  <!--</header> -->
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+</div>
